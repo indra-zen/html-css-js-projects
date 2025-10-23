@@ -3,27 +3,29 @@ const paletteContainer = document.querySelector(".palette-container");
 
 generateBtn.addEventListener("click", generatePalette);
 
-paletteContainer.addEventListener("click", function (e) {
+paletteContainer.addEventListener("click", async function (e) {
   if (e.target.classList.contains("copy-btn")) {
     const hexValue = e.target.previousElementSibling.textContent;
-
-    navigator.clipboard
-      .writeText(hexValue)
-      .then(() => showCopySuccess(e.target))
-      .catch((err) => console.log(err));
+    try {
+      await navigator.clipboard.writeText(hexValue);
+      showCopySuccess(e.target);
+    } catch (err) {
+      console.log(err);
+    }
   } else if (e.target.classList.contains("color")) {
     const hexValue = e.target.nextElementSibling.querySelector(".hex-value").textContent;
-    navigator.clipboard
-      .writeText(hexValue)
-      .then(() => showCopySuccess(e.target.nextElementSibling.querySelector(".copy-btn")))
-      .catch((err) => console.log(err));
+    try {
+      await navigator.clipboard.writeText(hexValue);
+      showCopySuccess(e.target.nextElementSibling.querySelector(".copy-btn"));
+    } catch (err) {
+      console.log(err);
+    }
   }
 });
 
 function showCopySuccess(element) {
   element.classList.remove("far", "fa-copy");
   element.classList.add("fas", "fa-check");
-
   element.style.color = "#48bb78";
 
   setTimeout(() => {
@@ -35,11 +37,7 @@ function showCopySuccess(element) {
 
 function generatePalette() {
   const colors = [];
-
-  for (let i = 0; i < 5; i++) {
-    colors.push(generateRandomColor());
-  }
-
+  for (let i = 0; i < 5; i++) colors.push(generateRandomColor());
   updatePaletteDisplay(colors);
 }
 
@@ -47,9 +45,7 @@ function generateRandomColor() {
   const letters = "0123456789ABCDEF";
   let color = "#";
 
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
+  for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
   return color;
 }
 
@@ -65,5 +61,3 @@ function updatePaletteDisplay(colors) {
     hexValue.textContent = color;
   });
 }
-
-// generatePalette();
