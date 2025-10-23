@@ -1,42 +1,47 @@
-const addBookmarkBtn = document.getElementById("add-bookmark");
+// const addBookmarkBtn = document.getElementById("add-bookmark");
+const bookmarkForm = document.getElementById("bookmark-form");
 const bookmarkList = document.getElementById("bookmark-list");
 const bookmarkNameInput = document.getElementById("bookmark-name");
 const bookmarkUrlInput = document.getElementById("bookmark-url");
 
 document.addEventListener("DOMContentLoaded", loadBookmarks);
 
-addBookmarkBtn.addEventListener("click", function () {
-  const name = bookmarkNameInput.value.trim();
-  const url = bookmarkUrlInput.value.trim();
+bookmarkForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-  if (!name || !url) {
+  const bookmark = {
+    name: bookmarkNameInput.value.trim(),
+    url: bookmarkUrlInput.value.trim(),
+  };
+
+  if (!bookmark.name || !bookmark.url) {
     alert("Please enter both name and URL.");
     return;
   } else {
-    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+    if (!bookmark.url?.startsWith("http://") && !bookmark.url?.startsWith("https://")) {
       alert("Please enter a valid URL starting with http:// or https://");
       return;
     }
 
-    addBookmark(name, url);
-    saveBookmark(name, url);
+    addBookmark(bookmark);
+    saveBookmark(bookmark);
     bookmarkNameInput.value = "";
     bookmarkUrlInput.value = "";
   }
 });
 
-function addBookmark(name, url) {
+function addBookmark(bookmark) {
   const li = document.createElement("li");
   const link = document.createElement("a");
-  link.href = url;
-  link.textContent = name;
+  link.href = bookmark.url;
+  link.textContent = bookmark.name;
   link.target = "_blank";
 
   const removeButton = document.createElement("button");
   removeButton.textContent = "Remove";
-  removeButton.addEventListener("click", function () {
+  removeButton.addEventListener("click", () => {
     bookmarkList.removeChild(li);
-    removeBookmarkFromStorage(name, url);
+    removeBookmarkFromStorage(bookmark.name, bookmark.url);
   });
 
   li.appendChild(link);
@@ -50,19 +55,19 @@ function getBookmarksFromStorage() {
   return bookmarks ? JSON.parse(bookmarks) : [];
 }
 
-function saveBookmark(name, url) {
+function saveBookmark(bookmark) {
   const bookmarks = getBookmarksFromStorage();
-  bookmarks.push({ name, url });
+  bookmarks.push(bookmark);
   localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
 }
 
 function loadBookmarks() {
   const bookmarks = getBookmarksFromStorage();
-  bookmarks.forEach((bookmark) => addBookmark(bookmark.name, bookmark.url));
+  bookmarks.forEach(addBookmark);
 }
 
-function removeBookmarkFromStorage(name, url) {
+function removeBookmarkFromStorage(bookmark) {
   let bookmarks = getBookmarksFromStorage();
-  bookmarks = bookmarks.filter((bookmark) => bookmark.name !== name || bookmark.url !== url);
+  bookmarks = bookmarks.filter((b) => b.name !== bookmark.name || b.url !== bookmark.url);
   localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
 }
