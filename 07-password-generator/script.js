@@ -1,4 +1,4 @@
-// DOM Elements - all the elements we need from HTML
+// Elemen DOM - semua elemen yang kita butuhin dari HTML
 const passwordInput = document.getElementById("password");
 const lengthSlider = document.getElementById("length");
 const lengthDisplay = document.getElementById("length-value");
@@ -12,17 +12,27 @@ const strengthBar = document.querySelector(".strength-bar");
 const strengthText = document.querySelector(".strength-container p");
 const strengthLabel = document.getElementById("strength-label");
 
-// Character sets
+// Kumpulan karakter
 const uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
 const numberCharacters = "0123456789";
 const symbolCharacters = "!@#$%^&*()-_=+[]{}|;:,.<>?/";
 
-lengthSlider.addEventListener("input", () => {
-  lengthDisplay.textContent = lengthSlider.value;
-});
+lengthSlider.addEventListener("input", () => (lengthDisplay.textContent = lengthSlider.value));
 
+window.addEventListener("DOMContentLoaded", makePassword);
 generateButton.addEventListener("click", makePassword);
+
+copyButton.addEventListener("click", async () => {
+  if (!passwordInput.value) return;
+
+  try {
+    await navigator.clipboard.writeText(passwordInput.value);
+    showCopySuccess();
+  } catch (error) {
+    console.log("Could not copy:", error);
+  }
+});
 
 function makePassword() {
   const length = Number(lengthSlider.value);
@@ -36,13 +46,7 @@ function makePassword() {
     return;
   }
 
-  const newPassword = createRandomPassword(
-    length,
-    includeUppercase,
-    includeLowercase,
-    includeNumbers,
-    includeSymbols
-  );
+  const newPassword = createRandomPassword(length, includeUppercase, includeLowercase, includeNumbers, includeSymbols);
 
   passwordInput.value = newPassword;
   updateStrengthMeter(newPassword);
@@ -57,8 +61,8 @@ function updateStrengthMeter(password) {
 
   let strengthScore = 0;
 
-  // here the .min will get the minimum value
-  // but this will make sure that "at maximum" you would get 40
+  // di sini .min bakal ngambil nilai minimum
+  // tapi ini ngejamin kalo "paling gede" nilainya cuma 40
   strengthScore += Math.min(passwordLength * 2, 40);
 
   if (hasUppercase) strengthScore += 15;
@@ -66,45 +70,23 @@ function updateStrengthMeter(password) {
   if (hasNumbers) strengthScore += 15;
   if (hasSymbols) strengthScore += 15;
 
-  // enforce minimum score for every short password
-  if (passwordLength < 8) {
-    strengthScore = Math.min(strengthScore, 40);
-  }
+  // bikin skor nggak lebih dari 40 buat password yang pendek
+  if (passwordLength < 8) strengthScore = Math.min(strengthScore, 40);
 
-  // ensure the width of the strength bar is a valid percentage
+  // pastiin lebar bar strength jadi persentase yang valid
   const safeScore = Math.max(5, Math.min(100, strengthScore));
   strengthBar.style.width = safeScore + "%";
 
-  let strengthLabelText = "";
-  let barColor = "";
-
-  if (strengthScore < 40) {
-    // weak password
-    barColor = "#fc8181";
-    strengthLabelText = "Weak";
-  } else if (strengthScore < 70) {
-    // Medium password
-    barColor = "#fbd38d"; // Yellow
-    strengthLabelText = "Medium";
-  } else {
-    // Strong password
-    barColor = "#68d391"; // Green
-    strengthLabelText = "Strong";
-  }
+  const strengthLabelText = strengthScore < 40 ? "Weak" : strengthScore < 70 ? "Medium" : "Strong";
+  const barColor = strengthScore < 40 ? "#fc8181" : strengthScore < 70 ? "#fbd38d" : "#68d391";
 
   strengthBar.style.backgroundColor = barColor;
   strengthLabel.textContent = strengthLabelText;
 }
 
-function createRandomPassword(
-  length,
-  includeUppercase,
-  includeLowercase,
-  includeNumbers,
-  includeSymbols
-) {
+function createRandomPassword(length, includeUppercase, includeLowercase, includeNumbers, includeSymbols) {
   let allCharacters = "";
-  // "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  // contohnya: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
   if (includeUppercase) allCharacters += uppercaseLetters;
   if (includeLowercase) allCharacters += lowercaseLetters;
@@ -120,17 +102,6 @@ function createRandomPassword(
 
   return password;
 }
-
-window.addEventListener("DOMContentLoaded", makePassword);
-
-copyButton.addEventListener("click", () => {
-  if (!passwordInput.value) return;
-
-  navigator.clipboard
-    .writeText(passwordInput.value)
-    .then(() => showCopySuccess())
-    .catch((error) => console.log("Could not copy:", error));
-});
 
 function showCopySuccess() {
   copyButton.classList.remove("far", "fa-copy");

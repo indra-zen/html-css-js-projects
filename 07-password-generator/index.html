@@ -12,63 +12,62 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <script src="script.js" defer></script>
   </head>
   <body>
-    <div class="container">
+    <main class="container">
       <h1>Password Generator</h1>
 
       <!-- password container -->
-      <div class="password-container">
+      <section class="password-container">
         <input type="text" readonly id="password" />
         <i class="far fa-copy" id="copy-btn" title="Copy to clipboard"></i>
-      </div>
+      </section>
 
       <!-- options -->
-      <div class="options">
+      <section class="options">
         <!-- password length -->
-        <div class="option">
+        <section class="option">
           <label for="length">Password Length</label>
-          <div class="range-container">
+          <section class="range-container">
             <input type="range" id="length" min="6" max="24" value="12" />
             <span id="length-value">12</span>
-          </div>
-        </div>
+          </section>
+        </section>
         <!-- include uppercase -->
-        <div class="option">
+        <section class="option">
           <label for="uppercase">Include Uppercase</label>
           <input type="checkbox" id="uppercase" checked />
-        </div>
+        </section>
         <!-- include lowercase -->
-        <div class="option">
+        <section class="option">
           <label for="lowercase">Include Lowercase</label>
           <input type="checkbox" id="lowercase" checked />
-        </div>
+        </section>
         <!-- include numbers -->
-        <div class="option">
+        <section class="option">
           <label for="numbers">Include Numbers</label>
           <input type="checkbox" id="numbers" checked />
-        </div>
+        </section>
         <!-- include symbols -->
-        <div class="option">
+        <section class="option">
           <label for="symbols">Include Symbols</label>
           <input type="checkbox" id="symbols" checked />
-        </div>
-      </div>
+        </section>
+      </section>
 
       <button id="generate-btn">
         <i class="fas fa-key"></i>
         Generate Password
       </button>
 
-      <div class="strength-container">
+      <section class="strength-container">
         <p>Password Strength: <span id="strength-label">Medium</span></p>
 
-        <div class="strength-meter">
-          <div class="strength-bar"></div>
-        </div>
-      </div>
-    </div>
-
-    <script src="script.js"></script>
+        <section class="strength-meter">
+          <section class="strength-bar"></section>
+        </section>
+      </section>
+    </main>
   </body>
 </html>
