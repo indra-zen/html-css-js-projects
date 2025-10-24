@@ -1,3 +1,4 @@
+const searchForm = document.querySelector("form.search-container");
 const searchInput = document.getElementById("search");
 const searchBtn = document.getElementById("search-btn");
 const profileContainer = document.getElementById("profile-container");
@@ -20,14 +21,14 @@ const blogContainer = document.getElementById("blog-container");
 const twitterContainer = document.getElementById("twitter-container");
 const reposContainer = document.getElementById("repos-container");
 
-searchBtn.addEventListener("click", searchUser);
-searchInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") searchUser();
-});
+const formatDate = (dateString) => new Date(dateString).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
 
-async function searchUser() {
+window.addEventListener('DOMContentLoaded', searchUser);
+searchForm.addEventListener("submit", searchUser);
+
+async function searchUser(e) {
+  e.preventDefault();
   const username = searchInput.value.trim();
-
   if (!username) return alert("Please enter a username");
 
   try {
@@ -40,10 +41,9 @@ async function searchUser() {
     if (!response.ok) throw new Error("User not found");
 
     const userData = await response.json();
-    console.log("user data is here", userData);
+    // console.log("user data is here", userData);
 
     displayUserData(userData);
-
     fetchRepositories(userData.repos_url);
   } catch (error) {
     showError();
@@ -67,43 +67,35 @@ function displayRepos(repos) {
     reposContainer.innerHTML = '<div class="no-repos">No repositories found</div>';
     return;
   }
-
   reposContainer.innerHTML = "";
 
   repos.forEach((repo) => {
-    const repoCard = document.createElement("div");
-    repoCard.className = "repo-card";
-
     const updatedAt = formatDate(repo.updated_at);
 
-    repoCard.innerHTML = `
-      <a href="${repo.html_url}" target="_blank" class="repo-name">
-        <i class="fas fa-code-branch"></i> ${repo.name}
-      </a>
-      <p class="repo-description">${repo.description || "No description available"}</p>
-      <div class="repo-meta">
-        ${
-          repo.language
-            ? `
+    reposContainer.innerHTML += `
+      <div class="repo-card">
+        <a href="${repo.html_url}" target="_blank" class="repo-name">
+          <i class="fas fa-code-branch"></i> ${repo.name}
+        </a>
+        <p class="repo-description">${repo.description || "No description available"}</p>
+        <div class="repo-meta">
+          ${repo.language ? `
+            <div class="repo-meta-item">
+              <i class="fas fa-circle"></i> ${repo.language}
+            </div>
+          ` : ""}
           <div class="repo-meta-item">
-            <i class="fas fa-circle"></i> ${repo.language}
+            <i class="fas fa-star"></i> ${repo.stargazers_count}
           </div>
-        `
-            : ""
-        }
-        <div class="repo-meta-item">
-          <i class="fas fa-star"></i> ${repo.stargazers_count}
-        </div>
-        <div class="repo-meta-item">
-          <i class="fas fa-code-fork"></i> ${repo.forks_count}
-        </div>
-        <div class="repo-meta-item">
-          <i class="fas fa-history"></i> ${updatedAt}
+          <div class="repo-meta-item">
+            <i class="fas fa-code-fork"></i> ${repo.forks_count}
+          </div>
+          <div class="repo-meta-item">
+            <i class="fas fa-history"></i> ${updatedAt}
+          </div>
         </div>
       </div>
     `;
-
-    reposContainer.appendChild(repoCard);
   });
 }
 
@@ -121,27 +113,14 @@ function displayUserData(user) {
   following.textContent = user.following;
   repos.textContent = user.public_repos;
 
-  if (user.company) companyElement.textContent = user.company;
-  else companyElement.textContent = "Not specified";
+  companyElement.textContent = user.company || "Not specified";
 
-  if (user.blog) {
-    blogElement.textContent = user.blog;
-    blogElement.href = user.blog.startsWith("http") ? user.blog : `https://${user.blog}`;
-  } else {
-    blogElement.textContent = "No website";
-    blogElement.href = "#";
-  }
-
+  blogElement.textContent = user.blog || "No website";
+  blogElement.href = user.blog ? user.blog.startsWith("http") ? user.blog : `https://${user.blog}` : "#";
   blogContainer.style.display = "flex";
 
-  if (user.twitter_username) {
-    twitterElement.textContent = `@${user.twitter_username}`;
-    twitterElement.href = `https://twitter.com/${user.twitter_username}`;
-  } else {
-    twitterElement.textContent = "No Twitter";
-    twitterElement.href = "#";
-  }
-
+  twitterElement.textContent = user.twitter_username ? `@${user.twitter_username}` : "No Twitter";
+  twitterElement.href = user.twitter_username ? `https://twitter.com/${user.twitter_username}` : "#";
   twitterContainer.style.display = "flex";
 
   // show the profile
@@ -152,14 +131,3 @@ function showError() {
   errorContainer.classList.remove("hidden");
   profileContainer.classList.add("hidden");
 }
-
-function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
-searchInput.value = "burakorkmez";
-searchUser();
