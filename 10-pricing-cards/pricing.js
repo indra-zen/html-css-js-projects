@@ -1,0 +1,47 @@
+export const pricingData = [
+  {
+    name: "Basic",
+    icon: "fa-rocket",
+    price: 9,
+    description: "Perfect for individuals and small projects",
+    features: [
+      { text: "5 Projects", enabled: true },
+      { text: "20GB Storage", enabled: true },
+      { text: "Basic Support", enabled: true },
+      { text: "Email Notifications", enabled: true },
+      { text: "Advanced Analytics", enabled: false },
+      { text: "Custom Domain", enabled: false },
+    ],
+    popular: false,
+  },
+  {
+    name: "Pro",
+    icon: "fa-gem",
+    price: 29,
+    description: "Great for growing businesses and teams",
+    features: [
+      { text: "5 Projects", enabled: true },
+      { text: "20GB Storage", enabled: true },
+      { text: "Basic Support", enabled: true },
+      { text: "Email Notifications", enabled: true },
+      { text: "Advanced Analytics", enabled: true },
+      { text: "Custom Domain", enabled: false },
+    ],
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    icon: "fa-building",
+    price: 79,
+    description: "For large companies and organizations",
+    features: [
+      { text: "5 Projects", enabled: true },
+      { text: "20GB Storage", enabled: true },
+      { text: "Basic Support", enabled: true },
+      { text: "Email Notifications", enabled: true },
+      { text: "Advanced Analytics", enabled: true },
+      { text: "Custom Domain", enabled: true },
+    ],
+    popular: false,
+  },
+];
