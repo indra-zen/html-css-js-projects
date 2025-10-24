@@ -1,4 +1,5 @@
 // DOM Elements
+const searchForm = document.querySelector("form.search-container");
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
 const mealsContainer = document.getElementById("meals");
@@ -12,17 +13,12 @@ const BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
 const SEARCH_URL = `${BASE_URL}search.php?s=`;
 const LOOKUP_URL = `${BASE_URL}lookup.php?i=`;
 
-searchBtn.addEventListener("click", searchMeals);
-
+searchForm.addEventListener("submit", searchMeals);
 mealsContainer.addEventListener("click", handleMealClick);
-
 backBtn.addEventListener("click", () => mealDetails.classList.add("hidden"));
 
-searchInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") searchMeals();
-});
-
-async function searchMeals() {
+async function searchMeals(e) {
+  e.preventDefault();
   const searchTerm = searchInput.value.trim();
 
   // handled the edge case
@@ -88,51 +84,35 @@ async function handleMealClick(e) {
 
     if (data.meals && data.meals[0]) {
       const meal = data.meals[0];
-
       const ingredients = [];
 
-      for (let i = 1; i <= 20; i++) {
-        if (meal[`strIngredient${i}`] && meal[`strIngredient${i}`].trim() !== "") {
-          ingredients.push({
-            ingredient: meal[`strIngredient${i}`],
-            measure: meal[`strMeasure${i}`],
-          });
-        }
-      }
+      for (let i = 1; i <= 20; i++)
+        if (meal[`strIngredient${i}`] && meal[`strIngredient${i}`].trim() !== "")
+          ingredients.push({ ingredient: meal[`strIngredient${i}`], measure: meal[`strMeasure${i}`] });
 
       // display meal details
       mealDetailsContent.innerHTML = `
-           <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="meal-details-img">
-           <h2 class="meal-details-title">${meal.strMeal}</h2>
-           <div class="meal-details-category">
-             <span>${meal.strCategory || "Uncategorized"}</span>
-           </div>
-           <div class="meal-details-instructions">
-             <h3>Instructions</h3>
-             <p>${meal.strInstructions}</p>
-           </div>
-           <div class="meal-details-ingredients">
-             <h3>Ingredients</h3>
-             <ul class="ingredients-list">
-               ${ingredients
-                 .map(
-                   (item) => `
-                 <li><i class="fas fa-check-circle"></i> ${item.measure} ${item.ingredient}</li>
-               `
-                 )
-                 .join("")}
-             </ul>
-           </div>
-           ${
-             meal.strYoutube
-               ? `
-             <a href="${meal.strYoutube}" target="_blank" class="youtube-link">
-               <i class="fab fa-youtube"></i> Watch Video
-             </a>
-           `
-               : ""
-           }
-         `;
+        <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="meal-details-img">
+        <h2 class="meal-details-title">${meal.strMeal}</h2>
+        <div class="meal-details-category">
+          <span>${meal.strCategory || "Uncategorized"}</span>
+        </div>
+        <div class="meal-details-instructions">
+          <h3>Instructions</h3>
+          <p>${meal.strInstructions}</p>
+        </div>
+        <div class="meal-details-ingredients">
+          <h3>Ingredients</h3>
+          <ul class="ingredients-list">
+            ${ingredients.map((item) => `<li><i class="fas fa-check-circle"></i> ${item.measure} ${item.ingredient}</li>`).join("")}
+          </ul>
+        </div>
+        ${meal.strYoutube ? `
+          <a href="${meal.strYoutube}" target="_blank" class="youtube-link">
+            <i class="fab fa-youtube"></i> Watch Video
+          </a>
+        ` : ""}
+      `;
 
       mealDetails.classList.remove("hidden");
       mealDetails.scrollIntoView({ behavior: "smooth" });
