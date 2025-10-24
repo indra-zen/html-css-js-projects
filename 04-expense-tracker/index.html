@@ -12,48 +12,48 @@
   </head>
   <body>
     <div class="container">
-      <h1>Expense Tracker</h1>
+      <h1>Pencatat Pengeluaran</h1>
 
       <div class="balance-container">
-        <h2>Your Balance</h2>
-        <h1 id="balance">$0.00</h1>
+        <h2>Saldo Kamu</h2>
+        <h1 id="balance">Rp 0</h1>
 
         <div class="summary">
           <div class="income">
-            <h3>Income</h3>
-            <p id="income-amount">$0.00</p>
+            <h3>Pemasukan</h3>
+            <p id="income-amount">Rp 0</p>
           </div>
           <div class="expenses">
-            <h3>Expenses</h3>
-            <p id="expense-amount">$0.00</p>
+            <h3>Pengeluaran</h3>
+            <p id="expense-amount">Rp 0</p>
           </div>
         </div>
       </div>
 
       <div class="main-content">
         <div class="transaction-container">
-          <h2>Transactions</h2>
+          <h2>Transaksi</h2>
           <ul id="transaction-list">
-            <!-- TRANSACTIONS WILL BE INSERTED HERE -->
+            <!-- TRANSAKSI BAKAL MUNCUL DI SINI -->
           </ul>
         </div>
 
         <div class="form-container">
-          <h2>Add Transaction</h2>
+          <h2>Tambah Transaksi</h2>
 
           <form id="transaction-form">
             <div class="form-group">
-              <label for="description">Description</label>
-              <input type="text" id="description" placeholder="Enter description..." required />
+              <label for="description">Keterangan</label>
+              <input type="text" id="description" placeholder="Masukkan keterangan..." required />
             </div>
 
             <div class="form-group">
-              <label for="amount">Amount</label>
-              <input type="number" id="amount" placeholder="Enter amount..." required />
-              <small>Use negative (-) for expenses</small>
+              <label for="amount">Jumlah</label>
+              <input type="number" id="amount" placeholder="Masukkan jumlah..." required />
+              <small>Pakai minus (-) untuk pengeluaran</small>
             </div>
 
-            <button type="submit">Add Transaction</button>
+            <button type="submit">Tambah Transaksi</button>
           </form>
         </div>
       </div>
