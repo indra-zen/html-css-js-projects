@@ -4,17 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recipe Finder App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+    <script src="script.js" defer></script>
   </head>
   <body>
-    <div class="container">
+    <main class="container">
       <header>
         <h1><i class="fas fa-utensils"></i> Recipe Finder</h1>
         <p>Find delicious recipes from around the world</p>
@@ -22,26 +17,24 @@
 
       <p class="api-link">Data from <a href="https://www.themealdb.com/api.php">TheMealDB 🧑‍🍳</a></p>
 
-      <div class="search-container">
+      <form class="search-container">
         <input type="text" id="search-input" placeholder="Search for meals or keywords" />
-        <button id="search-btn">Search</button>
-      </div>
+        <button id="search-btn" type="submit">Search</button>
+      </form>
 
-      <div id="error-container" class="hidden">
+      <section id="error-container" class="hidden">
         <p>No meals found. Try another search term!</p>
-      </div>
+      </section>
 
-      <div id="result-heading"></div>
+      <section id="result-heading"></section>
 
-      <div id="meals" class="meals-container"></div>
+      <section id="meals" class="meals-container"></section>
 
-      <div id="meal-details" class="hidden">
+      <section id="meal-details" class="hidden">
         <button id="back-btn"><i class="fas fa-arrow-left"></i> Back to recipes</button>
 
-        <div class="meal-details-content"></div>
-      </div>
-    </div>
-
-    <script src="script.js"></script>
+        <section class="meal-details-content"></section>
+      </section>
+    </main>
   </body>
 </html>
