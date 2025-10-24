@@ -5,24 +5,26 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: system-ui, -apple-system, sans-serif; /* Font yang lebih bagus */
   background-color: #f7f9fc;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 1rem; /* Biar ga mentok pinggir di mobile */
 }
 
 .container {
   text-align: center;
   width: 100%;
+  max-width: 1400px; /* Batas lebar maksimal */
   padding: 1.2rem;
 }
 
 h1 {
   color: #333;
   margin-bottom: 20px;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 5vw, 2rem); /* Ukuran font yang responsif */
 }
 
 .board {
@@ -42,12 +44,13 @@ h1 {
   width: 30%;
   min-height: 400px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease; /* Transisi yang mulus */
 }
 
 .list h2 {
   color: #555;
   margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem); /* Ukuran font yang responsif */
 }
 
 .card {
@@ -58,7 +61,8 @@ h1 {
   border-radius: 8px;
   cursor: grab;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Tambahin easing biar halus */
+  user-select: none; /* Biar teks ga ke-select waktu di-drag */
 }
 
 .card:active {
@@ -67,8 +71,14 @@ h1 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.card:hover {
+  transform: translateY(-2px); /* Efek hover yang subtle */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+}
+
 .list.over {
   background-color: #d1d3d8;
+  border: 2px dashed #999; /* Feedback visual */
 }
 
 @media (max-width: 768px) {
@@ -78,7 +88,8 @@ h1 {
   }
 
   .list {
-    width: 80%;
+    width: 100%; /* Lebar penuh di mobile */
+    max-width: 500px; /* Batasi lebar maksimal */
     margin-bottom: 20px;
   }
 }

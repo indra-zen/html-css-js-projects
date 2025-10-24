@@ -14,7 +14,7 @@ for (const list of lists) {
 }
 
 function dragStart(e) {
-  // this allows the drop location to know which element is being moved when you release it
+  // kasih tau elemen mana yang lagi di-drag, biar nanti pas di-drop tau harus mindahin yang mana
   e.dataTransfer.setData("text/plain", this.id);
 }
 
@@ -23,7 +23,7 @@ function dragEnd() {
 }
 
 function dragOver(e) {
-  // this line is important because by default, browsers don't allow you to drop elements onto other elements.
+  // ini wajib ada, soalnya secara default browser nggak ngebolehin drop elemen ke elemen lain
   e.preventDefault();
 }
 
