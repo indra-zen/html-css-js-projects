@@ -4,7 +4,10 @@ const email = document.getElementById("email");
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirmPassword");
 
-form.addEventListener("submit", function (e) {
+// Format nama field dengan huruf kapital di awal
+const formatFieldName = (input) => input.id.charAt(0).toUpperCase() + input.id.slice(1); // contoh input id: username -> Username
+
+form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   const isRequiredValid = checkRequired([username, email, password, confirmPassword]);
@@ -21,7 +24,7 @@ form.addEventListener("submit", function (e) {
   }
 
   if (isFormValid) {
-    alert("Registration successful!");
+    alert("Registrasi berhasil!");
     form.reset();
     document.querySelectorAll(".form-group").forEach((group) => {
       group.className = "form-group";
@@ -31,30 +34,30 @@ form.addEventListener("submit", function (e) {
 
 function checkPasswordsMatch(input1, input2) {
   if (input1.value !== input2.value) {
-    showError(input2, "Passwords do not match");
+    showError(input2, "Password tidak cocok");
     return false;
   }
   return true;
 }
 
 function checkEmail(email) {
-  // Email regex that covers most common email formats
+  // Regex email yang mencakup format email umum
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (emailRegex.test(email.value.trim())) {
     showSuccess(email);
     return true;
   } else {
-    showError(email, "Email is not valid");
+    showError(email, "Email tidak valid");
     return false;
   }
 }
 
 function checkLength(input, min, max) {
   if (input.value.length < min) {
-    showError(input, `${formatFieldName(input)} must be at least ${min} characters.`);
+    showError(input, `${formatFieldName(input)} harus minimal ${min} karakter.`);
     return false;
   } else if (input.value.length > max) {
-    showError(input, `${formatFieldName(input)} must be less than ${max} characters.`);
+    showError(input, `${formatFieldName(input)} harus kurang dari ${max} karakter.`);
     return false;
   } else {
     showSuccess(input);
@@ -66,9 +69,9 @@ function checkRequired(inputArray) {
   let isValid = true;
 
   inputArray.forEach((input) => {
-    // Password is required
+    // Cek apakah field wajib diisi
     if (input.value.trim() === "") {
-      showError(input, `${formatFieldName(input)} is required`);
+      showError(input, `${formatFieldName(input)} wajib diisi`);
       isValid = false;
     } else {
       showSuccess(input);
@@ -76,12 +79,6 @@ function checkRequired(inputArray) {
   });
 
   return isValid;
-}
-
-// Format field name with proper capitalization
-function formatFieldName(input) {
-  // input id: username -> Username
-  return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
 
 function showError(input, message) {
